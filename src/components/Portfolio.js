@@ -495,12 +495,19 @@ const Portfolio = () => {
           {/* photo */}
           <div style={{ position:'relative', display:'inline-block', marginBottom:32 }}>
             <div className="photo-ring" style={{
-              width:150, height:150, borderRadius:'50%',
+              width:185, height:185, borderRadius:'50%',
               background:'linear-gradient(135deg,#6366f1,#8b5cf6,#06b6d4)',
-              padding:3, display:'inline-flex', alignItems:'center', justifyContent:'center',
+              padding:4, display:'inline-flex', alignItems:'center', justifyContent:'center',
             }}>
               <img src={process.env.PUBLIC_URL+'/ashish-pic.jpeg'} alt="Ashish Umrey"
-                style={{ width:144, height:144, borderRadius:'50%', objectFit:'cover', border:`3px solid ${T.photoBorder}`, transition:'border-color 0.4s' }} />
+                style={{
+                  width:177, height:177, borderRadius:'50%',
+                  objectFit:'cover',
+                  objectPosition:'center 18%',
+                  border:`4px solid ${T.photoBorder}`,
+                  transition:'border-color 0.4s',
+                  display:'block',
+                }} />
             </div>
             <div style={{
               position:'absolute', bottom:6, right:6,
