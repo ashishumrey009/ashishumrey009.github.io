@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Mail, MapPin, Linkedin, Github, Globe, ChevronDown,
   Code, Briefcase, GraduationCap, Award, MessageSquare,
-  ExternalLink, Star, Target, Phone, Sun, Moon
+  ExternalLink, Star, Target, Phone, Sun, Moon, Menu, X,
+  ShieldCheck, Workflow, Gauge
 } from 'lucide-react';
 
 /* ─── CSS: theme tokens + all component styles ───────────────────────── */
@@ -133,6 +134,39 @@ const buildStyles = (dark) => `
   .nav-pill:hover { color:#818cf8; background:rgba(99,102,241,0.1); }
   .nav-pill.active { color:${dark ? '#fff' : '#4f46e5'}; background:rgba(99,102,241,0.18); border-color:rgba(99,102,241,0.4); box-shadow:0 0 14px rgba(99,102,241,0.2); }
 
+  .desktop-nav {
+    display:flex; align-items:center; gap:6px;
+  }
+
+  .mobile-menu-button {
+    display:none; align-items:center; justify-content:center;
+    width:42px; height:42px; border-radius:12px;
+    border:1px solid var(--social-border);
+    background:var(--social-bg); color:var(--social-color);
+    cursor:pointer; transition:all 0.25s ease;
+  }
+  .mobile-menu-button:hover { color:#fff; background:rgba(99,102,241,0.25); border-color:rgba(99,102,241,0.5); }
+
+  .mobile-theme-wrap { display:none; align-items:center; }
+
+  .mobile-panel {
+    position:fixed; top:74px; left:16px; right:16px; z-index:99;
+    display:none; padding:14px;
+    border-radius:18px; border:1px solid var(--border);
+    background:${dark ? 'rgba(8,11,20,0.96)' : 'rgba(255,255,255,0.96)'};
+    box-shadow:0 24px 60px rgba(15,23,42,0.28);
+    backdrop-filter:blur(24px);
+  }
+  .mobile-panel.open { display:block; }
+  .mobile-nav-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+  .mobile-nav-pill {
+    width:100%; min-height:44px; padding:10px 12px; border-radius:12px;
+    border:1px solid var(--pill-border); background:var(--pill-bg);
+    color:var(--nav-text); font-weight:600; font-size:0.86rem;
+    cursor:pointer; transition:all 0.2s ease;
+  }
+  .mobile-nav-pill.active { color:${dark ? '#fff' : '#4f46e5'}; border-color:rgba(99,102,241,0.45); background:rgba(99,102,241,0.18); }
+
   /* ── photo ring pulse ── */
   @keyframes ringPulse {
     0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,0.5);}
@@ -175,6 +209,73 @@ const buildStyles = (dark) => `
     cursor:pointer; transition:all 0.25s ease; text-decoration:none;
   }
   .cta-secondary:hover { background:rgba(99,102,241,0.12); transform:translateY(-2px); box-shadow:0 8px 24px rgba(99,102,241,0.2); color:${dark ? '#fff' : '#4f46e5'}; }
+
+  .hero-kicker {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 14px; border-radius:999px;
+    border:1px solid var(--pill-border); background:var(--pill-bg);
+    color:${dark ? '#c4b5fd' : '#4f46e5'};
+    font-size:0.78rem; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; margin-bottom:18px;
+  }
+
+  .hero-photo-wrap {
+    position:relative; display:flex; justify-content:center; margin:0 auto 28px;
+  }
+
+  .hero-photo-frame {
+    position:relative; display:inline-flex;
+  }
+
+  .hero-summary {
+    max-width:660px; margin:0 auto 28px;
+    color:var(--text-muted); font-size:1rem; line-height:1.75;
+  }
+
+  .build-lab {
+    max-width:980px; margin:0 auto;
+    display:grid; grid-template-columns:minmax(230px,0.8fr) minmax(0,1.2fr);
+    gap:18px; align-items:stretch;
+  }
+
+  .build-option {
+    width:100%; min-height:64px; padding:14px 16px; border-radius:16px;
+    display:flex; align-items:center; gap:12px; text-align:left;
+    border:1px solid var(--pill-border); background:var(--pill-bg);
+    color:var(--text-muted); cursor:pointer; transition:all 0.24s ease;
+  }
+  .build-option:hover, .build-option.active {
+    transform:translateX(4px); color:var(--text-primary);
+    border-color:rgba(99,102,241,0.45); background:rgba(99,102,241,0.16);
+    box-shadow:0 14px 34px rgba(99,102,241,0.14);
+  }
+  .build-option strong { display:block; color:var(--text-primary); font-size:0.94rem; margin-bottom:2px; }
+  .build-option span { display:block; font-size:0.78rem; line-height:1.4; }
+  .build-icon {
+    width:40px; height:40px; border-radius:12px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(99,102,241,0.16); color:#a5b4fc;
+    border:1px solid rgba(99,102,241,0.22);
+  }
+  .build-stage {
+    min-height:100%; border-radius:20px; border:1px solid var(--border);
+    background:${dark ? 'linear-gradient(145deg,rgba(15,23,42,0.72),rgba(8,11,20,0.84))' : 'linear-gradient(145deg,rgba(255,255,255,0.96),rgba(238,242,255,0.9))'};
+    padding:26px; position:relative; overflow:hidden;
+  }
+  .build-stage::before {
+    content:''; position:absolute; inset:auto -18% -45% 20%; height:220px;
+    background:radial-gradient(circle,rgba(6,182,212,0.18),transparent 64%);
+    pointer-events:none;
+  }
+  .build-stage h3 { position:relative; font-size:1.35rem; margin-bottom:10px; color:var(--text-primary); }
+  .build-stage p { position:relative; color:var(--text-muted); line-height:1.75; margin-bottom:18px; }
+  .metric-grid { position:relative; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:20px; }
+  .metric-tile {
+    border-radius:14px; border:1px solid var(--chip-border);
+    background:var(--chip-bg); padding:14px 12px;
+  }
+  .metric-tile strong { display:block; color:${dark ? '#e0e7ff' : '#4338ca'}; font-size:1.1rem; margin-bottom:4px; }
+  .metric-tile span { color:var(--text-faint); font-size:0.75rem; line-height:1.4; }
 
   /* ── gradient text ── */
   .grad-blue  { background:linear-gradient(135deg,#818cf8,#c084fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -226,6 +327,24 @@ const buildStyles = (dark) => `
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-size: 11px;
     transform: ${dark ? 'translateX(28px)' : 'translateX(0)'};
+  }
+
+  @media (max-width: 900px) {
+    .desktop-nav { display:none; }
+    .mobile-menu-button { display:flex; }
+    .mobile-theme-wrap { display:flex; }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding:12px 20px !important; }
+    .brand-name { font-size:1rem !important; }
+    .hero-kicker { max-width:100%; justify-content:center; line-height:1.5; white-space:normal; }
+    .hero-summary { font-size:0.92rem; line-height:1.65; }
+    .contact-info-row { max-width:100%; overflow-wrap:anywhere; justify-content:center; }
+    .cta-primary, .cta-secondary { width:min(100%, 270px); justify-content:center; }
+    .timeline-dot { width:42px; height:42px; font-size:1.1rem; }
+    .build-lab { grid-template-columns:1fr; }
+    .metric-grid { grid-template-columns:1fr; }
   }
 `;
 
@@ -313,7 +432,9 @@ const Portfolio = () => {
   const toggleTheme = () => setDark(d => { const next = !d; try { localStorage.setItem('theme', next ? 'dark' : 'light'); } catch {} return next; });
 
   const [activeSection, setActiveSection] = useState('about');
-  const typed = useTyped(['Software Engineer','Backend Developer','React Developer','Scrum Master'], 80, 1800);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeBuild, setActiveBuild] = useState(0);
+  const typed = useTyped(['Senior Software Engineer','Backend Developer','React Developer','Scrum Master'], 80, 1800);
   useScrollReveal();
 
   useEffect(() => {
@@ -326,7 +447,10 @@ const Portfolio = () => {
     return () => io.disconnect();
   }, []);
 
-  const scrollTo = id => document.getElementById(id)?.scrollIntoView({ behavior:'smooth' });
+  const scrollTo = id => {
+    document.getElementById(id)?.scrollIntoView({ behavior:'smooth' });
+    setMobileOpen(false);
+  };
   const navItems = ['about','experience','education','projects','achievements','contact'];
 
   const T = {
@@ -415,6 +539,30 @@ const Portfolio = () => {
     { title:'Pdhantu Classes', subtitle:'Online Test Platform', description:'A web platform for students to take tests and track their performance in real time.', link:'https://github.com/Pdhantu-Classes', tech:['React','JavaScript','Flask (Python)','REST API'], icon:'📚', color:'linear-gradient(135deg,#818cf8,#a78bfa)' },
   ];
 
+  const buildStories = [
+    {
+      title:'Claims Workflow Acceleration',
+      label:'Authops workflow',
+      summary:'Reduced friction in medical-claims operations by shaping authorization screens around the way agents actually scan, compare, and act.',
+      icon:<Workflow size={20} />,
+      metrics:[['25%','lower task time'],['20%','higher agent efficiency'],['React','Forge UI']],
+    },
+    {
+      title:'Healthcare Service Foundations',
+      label:'Backend systems',
+      summary:'Building Java Spring Boot microservices and REST APIs for critical healthcare workflows where reliability matters more than decoration.',
+      icon:<ShieldCheck size={20} />,
+      metrics:[['Java','Spring Boot'],['REST','API design'],['Scale','microservices']],
+    },
+    {
+      title:'Product Delivery Rhythm',
+      label:'Team delivery',
+      summary:'Serving as Scrum Master while staying hands-on, keeping work visible, unblocked, and tied to measurable product outcomes.',
+      icon:<Gauge size={20} />,
+      metrics:[['Agile','delivery'],['Nov 2024','Scrum Master'],['Cross-team','collaboration']],
+    },
+  ];
+
   const achievements = [
     {
       category:'Professional', icon:<Target size={20} />, color:'251,191,36', hexColor:'#fbbf24',
@@ -456,13 +604,13 @@ const Portfolio = () => {
             fontWeight:800, fontSize:'0.9rem', color:'#fff',
             boxShadow:'0 0 16px rgba(99,102,241,0.4)',
           }}>AU</div>
-          <span style={{ fontWeight:700, fontSize:'1.1rem', color:T.navName, letterSpacing:'-0.02em' }}>
+          <span className="brand-name" style={{ fontWeight:700, fontSize:'1.1rem', color:T.navName, letterSpacing:'-0.02em' }}>
             Ashish Umrey
           </span>
         </div>
 
         {/* Nav links + toggle */}
-        <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+        <div className="desktop-nav">
           {navItems.map(s => (
             <button key={s} onClick={() => scrollTo(s)}
               className={`nav-pill${activeSection===s?' active':''}`}>
@@ -474,7 +622,32 @@ const Portfolio = () => {
             <ThemeToggle dark={dark} onToggle={toggleTheme} />
           </div>
         </div>
+
+        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+          <div className="mobile-theme-wrap">
+            <ThemeToggle dark={dark} onToggle={toggleTheme} />
+          </div>
+          <button
+            className="mobile-menu-button"
+            onClick={() => setMobileOpen(open => !open)}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
       </nav>
+
+      <div className={`mobile-panel${mobileOpen ? ' open' : ''}`}>
+        <div className="mobile-nav-grid">
+          {navItems.map(s => (
+            <button key={s} onClick={() => scrollTo(s)}
+              className={`mobile-nav-pill${activeSection===s?' active':''}`}>
+              {s.charAt(0).toUpperCase()+s.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* HERO */}
       <section id="about" style={{
@@ -493,31 +666,34 @@ const Portfolio = () => {
 
         <div style={{ position:'relative', textAlign:'center', maxWidth:700 }}>
           {/* photo */}
-          <div style={{ position:'relative', display:'inline-block', marginBottom:32 }}>
-            <div className="photo-ring" style={{
-              width:185, height:185, borderRadius:'50%',
-              background:'linear-gradient(135deg,#6366f1,#8b5cf6,#06b6d4)',
-              padding:4, display:'inline-flex', alignItems:'center', justifyContent:'center',
-            }}>
-              <img src={process.env.PUBLIC_URL+'/ashish-pic.jpeg'} alt="Ashish Umrey"
-                style={{
-                  width:177, height:177, borderRadius:'50%',
-                  objectFit:'cover',
-                  objectPosition:'center 18%',
-                  border:`4px solid ${T.photoBorder}`,
-                  transition:'border-color 0.4s',
-                  display:'block',
-                }} />
+          <div className="hero-photo-wrap">
+            <div className="hero-photo-frame">
+              <div className="photo-ring" style={{
+                width:185, height:185, borderRadius:'50%',
+                background:'linear-gradient(135deg,#6366f1,#8b5cf6,#06b6d4)',
+                padding:4, display:'inline-flex', alignItems:'center', justifyContent:'center',
+              }}>
+                <img src={process.env.PUBLIC_URL+'/ashish-pic.jpeg'} alt="Ashish Umrey"
+                  style={{
+                    width:177, height:177, borderRadius:'50%',
+                    objectFit:'cover',
+                    objectPosition:'center 18%',
+                    border:`4px solid ${T.photoBorder}`,
+                    transition:'border-color 0.4s',
+                    display:'block',
+                  }} />
+              </div>
+              <div style={{
+                position:'absolute', bottom:6, right:6,
+                width:18, height:18, borderRadius:'50%',
+                background:'#22c55e', border:`3px solid ${T.photoBorder}`,
+                boxShadow:'0 0 10px rgba(34,197,94,0.6)', transition:'border-color 0.4s',
+              }} />
             </div>
-            <div style={{
-              position:'absolute', bottom:6, right:6,
-              width:18, height:18, borderRadius:'50%',
-              background:'#22c55e', border:`3px solid ${T.photoBorder}`,
-              boxShadow:'0 0 10px rgba(34,197,94,0.6)', transition:'border-color 0.4s',
-            }} />
           </div>
 
           {/* name */}
+          <div className="hero-kicker">Healthcare Platforms | React | Java Spring Boot</div>
           <h1 style={{
             fontSize:'clamp(2.5rem,6vw,4.5rem)', fontWeight:800, lineHeight:1.08,
             letterSpacing:'-0.04em',
@@ -533,6 +709,11 @@ const Portfolio = () => {
             <span className="cursor" />
             <span style={{ color:T.typedBracket }}>{' />'}</span>
           </div>
+
+          <p className="hero-summary">
+            Senior Software Engineer building scalable healthcare workflows with React, Java Spring Boot, REST APIs, and microservices.
+            I like turning complex operational systems into fast, reliable product experiences.
+          </p>
 
           {/* contact chips */}
           <div style={{ display:'flex', justifyContent:'center', flexWrap:'wrap', gap:10, marginBottom:28 }}>
@@ -579,6 +760,42 @@ const Portfolio = () => {
                 <span>{s.icon}</span> {s.name}
               </span>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* BUILD LAB */}
+      <section style={{ padding:'100px 24px', transition:'background 0.4s' }}>
+        <div style={{ maxWidth:980, margin:'0 auto' }}>
+          <SectionHeading icon={Target} gradClass="grad-green">What I Build</SectionHeading>
+          <div className="build-lab reveal">
+            <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+              {buildStories.map((story,idx) => (
+                <button
+                  key={story.title}
+                  className={`build-option${activeBuild === idx ? ' active' : ''}`}
+                  onClick={() => setActiveBuild(idx)}
+                >
+                  <span className="build-icon">{story.icon}</span>
+                  <span>
+                    <strong>{story.label}</strong>
+                    <span>{story.title}</span>
+                  </span>
+                </button>
+              ))}
+            </div>
+            <div className="build-stage">
+              <h3>{buildStories[activeBuild].title}</h3>
+              <p>{buildStories[activeBuild].summary}</p>
+              <div className="metric-grid">
+                {buildStories[activeBuild].metrics.map(([value,label]) => (
+                  <div className="metric-tile" key={`${value}-${label}`}>
+                    <strong>{value}</strong>
+                    <span>{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -753,7 +970,7 @@ const Portfolio = () => {
       {/* FOOTER */}
       <footer style={{ padding:'28px 24px', borderTop:T.sectionBorder, textAlign:'center', background:T.footerBg, transition:'background 0.4s' }}>
         <p style={{ color:T.footerText, fontSize:'0.8rem' }}>
-          © 2025 Ashish Umrey · Crafted with ❤️ using React &amp; Tailwind CSS
+          © 2026 Ashish Umrey · Crafted with React &amp; Tailwind CSS
         </p>
       </footer>
     </>
