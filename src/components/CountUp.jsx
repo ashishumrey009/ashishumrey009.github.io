@@ -11,6 +11,7 @@ const CountUp = ({
   className = '',
   startWhen = true,
   suffix = '',
+  decimals = 0,
   onEnd,
 }) => {
   const ref = useRef(null);
@@ -33,13 +34,15 @@ const CountUp = ({
   useEffect(() => {
     return springValue.on('change', (v) => {
       if (ref.current) {
-        const formatted = direction === 'down'
-          ? Math.ceil(v).toString()
-          : Math.floor(v).toString();
+        let numericValue = direction === 'down' ? Math.ceil(v) : Math.floor(v);
+        if (decimals > 0) {
+           numericValue = v;
+        }
+        const formatted = numericValue.toFixed(decimals);
         ref.current.textContent = formatted + suffix;
       }
     });
-  }, [springValue, direction, suffix]);
+  }, [springValue, direction, suffix, decimals]);
 
   useEffect(() => {
     return springValue.on('animationComplete', () => {

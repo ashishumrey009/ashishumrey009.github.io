@@ -9,6 +9,7 @@ import {
 import BlurText from './BlurText';
 import CountUp from './CountUp';
 import Magnet from './Magnet';
+import TiltCard from './TiltCard';
 
 /* ─── CSS ────────────────────────────────────────────────────────────────── */
 const STYLES = `
@@ -87,6 +88,32 @@ const STYLES = `
   .reveal-left.visible { opacity: 1; transform: translateX(0); }
   .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1); }
   .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* Generic stagger pop animation */
+  .stagger-pop {
+    animation: stagger-pop-anim 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+  @keyframes stagger-pop-anim {
+    from { opacity: 0; transform: scale(0.9) translateY(12px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* Typewriter effect */
+  .typewriter-line {
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    white-space: nowrap; /* Keeps the content on a single line */
+    margin: 0 auto;
+    letter-spacing: .05em; /* Adjust as needed */
+    animation: 
+      typing 1.5s steps(40, end) forwards;
+    width: 0;
+  }
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+
 
   /* ── Nav ── */
   .nav-root {
@@ -518,29 +545,117 @@ const STYLES = `
     text-align: center;
     transition: all 0.25s ease;
   }
-  .gh-stat-chip:hover { border-color: rgba(124,58,237,0.3); background: rgba(124,58,237,0.06); transform: translateY(-2px); }
+  .gh-stat-chip:hover { border-color: rgba(124,58,237,0.3); background: rgba(124,58,237,0.06); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(124,58,237,0.15); }
   .gh-stat-val { font-family: var(--heading-font); font-size: 1.5rem; font-weight: 800; color: var(--violet-lt); }
   .gh-stat-lbl { font-size: 0.72rem; color: var(--muted); margin-top: 4px; font-weight: 500; letter-spacing: 0.03em; }
-  .gh-langs-title { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+
+  /* Stat stagger animation */
+  .gh-stat-stagger {
+    animation: gh-stat-pop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+  @keyframes gh-stat-pop {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* Fade-in utility */
+  .gh-fade-in {
+    animation: gh-fade 0.6s ease forwards;
+  }
+  @keyframes gh-fade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Card entrance */
+  .gh-card-animate {
+    animation: gh-card-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes gh-card-entrance {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .gh-langs-title { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; opacity: 0; }
   .gh-lang-bar-wrap { display: flex; height: 8px; border-radius: 999px; overflow: hidden; gap: 2px; margin-bottom: 16px; }
-  .gh-lang-segment { height: 100%; border-radius: 999px; transition: flex 0.5s ease; }
+  .gh-lang-segment {
+    height: 100%; border-radius: 999px;
+    transition: flex 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+  }
   .gh-lang-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
   .gh-lang-pill {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 5px 12px; border-radius: 999px;
     border: 1px solid var(--border); background: var(--obsidian-3);
     font-size: 0.75rem; font-weight: 600; color: var(--muted);
+    transition: all 0.25s ease;
   }
+  .gh-lang-pill:hover { border-color: rgba(124,58,237,0.3); transform: translateY(-1px); }
+
+  /* Pill stagger animation */
+  .gh-pill-stagger {
+    animation: gh-pill-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+  @keyframes gh-pill-pop {
+    from { opacity: 0; transform: scale(0.8) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
   .gh-lang-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .gh-contrib-wrap { border-top: 1px solid var(--border); padding: 20px; }
-  .gh-contrib-wrap img { width: 100%; border-radius: 10px; display: block; }
+  .gh-contrib-wrap { border-top: 1px solid var(--border); padding: 24px 20px; overflow-x: auto; }
+
+  /* Animated contribution grid */
+  .gh-contrib-grid-wrap { position: relative; }
+  .gh-contrib-months {
+    position: relative; height: 20px; margin-bottom: 6px;
+    margin-left: 36px;
+  }
+  .gh-contrib-month {
+    position: absolute; top: 0;
+    font-size: 0.68rem; color: var(--muted); font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+  .gh-contrib-canvas-row {
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .gh-contrib-days {
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    height: 109px; /* 7 cells × (13+3) - 3 */
+    padding-top: 2px;
+  }
+  .gh-contrib-days span {
+    font-size: 0.68rem; color: var(--muted); font-weight: 500;
+    line-height: 1;
+  }
+  .gh-contrib-canvas {
+    display: block;
+    border-radius: 6px;
+  }
+  .gh-contrib-legend {
+    display: flex; align-items: center; gap: 4px;
+    justify-content: flex-end;
+    margin-top: 10px; margin-right: 4px;
+  }
+  .gh-contrib-legend-label {
+    font-size: 0.65rem; color: var(--faint); margin: 0 4px;
+    font-weight: 500; letter-spacing: 0.02em;
+  }
+  .gh-contrib-legend-cell {
+    width: 12px; height: 12px; border-radius: 2.5px;
+    transition: transform 0.2s;
+  }
+  .gh-contrib-legend-cell:hover { transform: scale(1.3); }
+
   .gh-footer {
     padding: 14px 20px; border-top: 1px solid var(--border);
     display: flex; justify-content: space-between; align-items: center;
     flex-wrap: wrap; gap: 8px;
   }
   .gh-note { font-size: 0.75rem; color: var(--faint); font-style: italic; }
-  .gh-link { font-size: 0.78rem; color: var(--violet-lt); text-decoration: none; display: flex; align-items: center; gap: 4px; }
+  .gh-link { font-size: 0.78rem; color: var(--violet-lt); text-decoration: none; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
   .gh-link:hover { color: var(--cyan-lt); }
   @media (max-width: 600px) { .gh-stats-row { grid-template-columns: repeat(2, 1fr); } }
 
@@ -658,26 +773,207 @@ const ParticleCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let W = canvas.width = canvas.offsetWidth;
-    let H = canvas.height = canvas.offsetHeight;
+    const dpr = window.devicePixelRatio || 1;
+    let W, H;
 
-    const PARTICLE_COUNT = Math.floor((W * H) / 9000);
-    const MAX_DIST = 130;
-    const MOUSE_DIST = 160;
-
-    const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
-      r: Math.random() * 1.5 + 0.5,
-      alpha: Math.random() * 0.4 + 0.15,
-    }));
-
-    const onResize = () => {
-      W = canvas.width = canvas.offsetWidth;
-      H = canvas.height = canvas.offsetHeight;
+    const resize = () => {
+      W = canvas.offsetWidth;
+      H = canvas.offsetHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
+    resize();
+
+    /* ── Sample text pixels to get target positions ── */
+    const getTextTargets = () => {
+      const offscreen = document.createElement('canvas');
+      const octx = offscreen.getContext('2d');
+      offscreen.width = W;
+      offscreen.height = H;
+
+      // Calculate responsive font size
+      const fontSize = Math.min(W / 8, H / 5, 110);
+      const lineGap = fontSize * 1.15;
+      octx.fillStyle = '#fff';
+      octx.textAlign = 'center';
+      octx.textBaseline = 'middle';
+      octx.font = `900 ${fontSize}px 'Outfit', 'Inter', Arial, sans-serif`;
+
+      const centerY = H * 0.49;
+      octx.fillText('ASHISH', W / 2, centerY - lineGap / 2);
+      octx.fillText('UMREY', W / 2, centerY + lineGap / 2);
+
+      const imageData = octx.getImageData(0, 0, W, H).data;
+      const targets = [];
+      const gap = Math.max(3, Math.round(fontSize / 22)); // sampling density
+
+      for (let y = 0; y < H; y += gap) {
+        for (let x = 0; x < W; x += gap) {
+          const idx = (y * W + x) * 4;
+          if (imageData[idx + 3] > 128) {
+            targets.push({ x, y });
+          }
+        }
+      }
+      return targets;
+    };
+
+    let textTargets = getTextTargets();
+
+    /* ── Particle class ── */
+    class Particle {
+      constructor(tx, ty, isAmbient = false) {
+        this.tx = tx;           // target x
+        this.ty = ty;           // target y
+        this.x = Math.random() * W;   // current x
+        this.y = Math.random() * H;   // current y
+        this.vx = 0;
+        this.vy = 0;
+        this.isAmbient = isAmbient;
+        this.baseR = isAmbient ? Math.random() * 1.2 + 0.4 : Math.random() * 1.6 + 0.8;
+        this.r = this.baseR;
+        this.hue = Math.random() * 60 + 250; // violet-cyan range (250-310)
+        this.alpha = isAmbient ? Math.random() * 0.3 + 0.05 : 0.85;
+        this.delay = Math.random() * 120; // stagger assembly
+        this.frameCount = 0;
+        this.settled = false;
+        // Ambient drift
+        this.driftVx = (Math.random() - 0.5) * 0.4;
+        this.driftVy = (Math.random() - 0.5) * 0.4;
+        this.pulseOffset = Math.random() * Math.PI * 2;
+      }
+
+      update(mx, my, frame) {
+        this.frameCount++;
+
+        if (this.isAmbient) {
+          // Ambient particles just float
+          this.x += this.driftVx;
+          this.y += this.driftVy;
+          if (this.x < -20) this.x = W + 20;
+          if (this.x > W + 20) this.x = -20;
+          if (this.y < -20) this.y = H + 20;
+          if (this.y > H + 20) this.y = -20;
+          this.alpha = 0.08 + 0.12 * Math.sin(frame * 0.015 + this.pulseOffset);
+          return;
+        }
+
+        // Wait for stagger delay before converging
+        if (this.frameCount < this.delay) {
+          this.x += (Math.random() - 0.5) * 2;
+          this.y += (Math.random() - 0.5) * 2;
+          return;
+        }
+
+        // Mouse repulsion
+        const dMx = this.x - mx;
+        const dMy = this.y - my;
+        const distM = Math.sqrt(dMx * dMx + dMy * dMy);
+        const MOUSE_RADIUS = 120;
+
+        let fx = 0, fy = 0;
+        if (distM < MOUSE_RADIUS && distM > 0) {
+          const force = (MOUSE_RADIUS - distM) / MOUSE_RADIUS;
+          fx = (dMx / distM) * force * 8;
+          fy = (dMy / distM) * force * 8;
+          this.settled = false;
+        }
+
+        // Spring force toward target
+        const dx = this.tx - this.x;
+        const dy = this.ty - this.y;
+        const ease = 0.065;
+        const friction = 0.88;
+
+        this.vx += dx * ease + fx;
+        this.vy += dy * ease + fy;
+        this.vx *= friction;
+        this.vy *= friction;
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Check if settled
+        this.settled = (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5 && Math.abs(this.vx) < 0.1 && Math.abs(this.vy) < 0.1);
+
+        // Subtle pulse when settled
+        if (this.settled) {
+          this.r = this.baseR + 0.3 * Math.sin(frame * 0.03 + this.pulseOffset);
+          // Gentle hue cycling when settled
+          this.hue = 250 + 60 * Math.sin(frame * 0.005 + this.pulseOffset);
+        } else {
+          this.r = this.baseR;
+        }
+
+        this.alpha = 0.7 + 0.3 * Math.sin(frame * 0.02 + this.pulseOffset);
+      }
+
+      draw(ctx, frame) {
+        if (this.isAmbient) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(${this.hue}, 70%, 75%, ${this.alpha})`;
+          ctx.fill();
+          return;
+        }
+
+        // Glow
+        const glowR = this.r * 3.5;
+        const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowR);
+        const hue = this.hue;
+        grad.addColorStop(0, `hsla(${hue}, 80%, 75%, ${this.alpha * 0.6})`);
+        grad.addColorStop(0.4, `hsla(${hue}, 70%, 60%, ${this.alpha * 0.15})`);
+        grad.addColorStop(1, `hsla(${hue}, 60%, 50%, 0)`);
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, glowR, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Core
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${hue}, 85%, 80%, ${this.alpha})`;
+        ctx.fill();
+      }
+    }
+
+    /* ── Create particles ── */
+    let textParticles = textTargets.map(t => new Particle(t.x, t.y, false));
+
+    // Ambient background particles
+    const AMBIENT_COUNT = Math.min(80, Math.floor((W * H) / 18000));
+    const ambientParticles = Array.from({ length: AMBIENT_COUNT }, () =>
+      new Particle(0, 0, true)
+    );
+    // Give them random positions
+    ambientParticles.forEach(p => {
+      p.x = Math.random() * W;
+      p.y = Math.random() * H;
+    });
+
+    const allParticles = [...textParticles, ...ambientParticles];
+
+    /* ── Connections among nearby settled particles ── */
+    const CONNECT_DIST = 18;
+
+    let frame = 0;
+
+    /* ── Event handlers ── */
+    const onResize = () => {
+      resize();
+      textTargets = getTextTargets();
+      // Rebuild text particles
+      textParticles = textTargets.map(t => new Particle(t.x, t.y, false));
+      // Rebuild allParticles
+      allParticles.length = 0;
+      allParticles.push(...textParticles, ...ambientParticles);
+      ambientParticles.forEach(p => {
+        p.x = Math.random() * W;
+        p.y = Math.random() * H;
+      });
+    };
+
     const onMouseMove = e => {
       const rect = canvas.getBoundingClientRect();
       mouse.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
@@ -688,74 +984,75 @@ const ParticleCanvas = () => {
     canvas.parentElement.addEventListener('mousemove', onMouseMove);
     canvas.parentElement.addEventListener('mouseleave', onMouseLeave);
 
+    /* ── Draw loop ── */
     const draw = () => {
       ctx.clearRect(0, 0, W, H);
+      frame++;
+
       const mx = mouse.current.x;
       const my = mouse.current.y;
 
-      // Update & draw particles
-      for (let p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = W;
-        if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H;
-        if (p.y > H) p.y = 0;
-
-        // Mouse repel
-        const dMx = p.x - mx;
-        const dMy = p.y - my;
-        const distM = Math.sqrt(dMx * dMx + dMy * dMy);
-        if (distM < MOUSE_DIST) {
-          const force = (MOUSE_DIST - distM) / MOUSE_DIST;
-          p.x += (dMx / distM) * force * 1.8;
-          p.y += (dMy / distM) * force * 1.8;
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(167,139,250,${p.alpha})`;
-        ctx.fill();
+      // Update all particles
+      for (const p of allParticles) {
+        p.update(mx, my, frame);
       }
 
-      // Draw connections
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
+      // Draw subtle connections between settled text particles
+      ctx.lineWidth = 0.3;
+      for (let i = 0; i < textParticles.length; i++) {
+        if (!textParticles[i].settled) continue;
+        for (let j = i + 1; j < textParticles.length; j++) {
+          if (!textParticles[j].settled) continue;
+          const dx = textParticles[i].x - textParticles[j].x;
+          const dy = textParticles[i].y - textParticles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < MAX_DIST) {
-            const op = (1 - dist / MAX_DIST) * 0.25;
+          if (dist < CONNECT_DIST) {
+            const op = (1 - dist / CONNECT_DIST) * 0.12;
             ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(124,58,237,${op})`;
-            ctx.lineWidth = 0.6;
+            ctx.moveTo(textParticles[i].x, textParticles[i].y);
+            ctx.lineTo(textParticles[j].x, textParticles[j].y);
+            ctx.strokeStyle = `rgba(167,139,250,${op})`;
             ctx.stroke();
           }
         }
-        // Mouse connections
-        const dx = particles[i].x - mx;
-        const dy = particles[i].y - my;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < MOUSE_DIST) {
-          const op = (1 - dist / MOUSE_DIST) * 0.6;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(mx, my);
-          ctx.strokeStyle = `rgba(6,182,212,${op})`;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
+      }
+
+      // Draw mouse connections to nearby text particles
+      if (mx > 0 && my > 0) {
+        const MOUSE_CONNECT = 140;
+        ctx.lineWidth = 0.5;
+        for (const p of textParticles) {
+          const dx = p.x - mx;
+          const dy = p.y - my;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MOUSE_CONNECT) {
+            const op = (1 - dist / MOUSE_CONNECT) * 0.35;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mx, my);
+            ctx.strokeStyle = `rgba(6,182,212,${op})`;
+            ctx.stroke();
+          }
         }
+      }
+
+      // Draw all particles
+      for (const p of allParticles) {
+        p.draw(ctx, frame);
       }
 
       animRef.current = requestAnimationFrame(draw);
     };
 
     draw();
+
     return () => {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener('resize', onResize);
+      if (canvas.parentElement) {
+        canvas.parentElement.removeEventListener('mousemove', onMouseMove);
+        canvas.parentElement.removeEventListener('mouseleave', onMouseLeave);
+      }
     };
   }, []);
 
@@ -766,7 +1063,7 @@ const ParticleCanvas = () => {
         position: 'absolute', inset: 0,
         width: '100%', height: '100%',
         pointerEvents: 'none', zIndex: 0,
-        opacity: 0.7,
+        opacity: 0.85,
       }}
     />
   );
@@ -782,11 +1079,264 @@ const LANG_COLORS = {
   Vue: '#42B883', SCSS: '#CC6699', PHP: '#777BB4',
 };
 
+/* ── Animated Contribution Grid ── */
+const ContributionGrid = () => {
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [hoveredCell, setHoveredCell] = useState(null);
+  const animRef = useRef(null);
+  const startTimeRef = useRef(null);
+
+  // Generate contribution data (52 weeks × 7 days)
+  const gridData = useRef(null);
+  if (!gridData.current) {
+    const weeks = 52;
+    const days = 7;
+    const data = [];
+    for (let w = 0; w < weeks; w++) {
+      const week = [];
+      for (let d = 0; d < days; d++) {
+        // Generate realistic-looking contribution data
+        const base = Math.random();
+        let level = 0;
+        if (base > 0.65) level = 1;
+        if (base > 0.78) level = 2;
+        if (base > 0.88) level = 3;
+        if (base > 0.95) level = 4;
+        // More activity in recent weeks
+        if (w > 40 && Math.random() > 0.4) level = Math.min(4, level + 1);
+        week.push(level);
+      }
+      data.push(week);
+    }
+    gridData.current = data;
+  }
+
+  const LEVEL_COLORS = [
+    'rgba(255,255,255,0.04)',   // 0: empty
+    'rgba(124,58,237,0.35)',    // 1: light
+    'rgba(124,58,237,0.55)',    // 2: medium
+    'rgba(124,58,237,0.75)',    // 3: high
+    'rgba(167,139,250,0.95)',   // 4: max
+  ];
+  const LEVEL_GLOW = [
+    'transparent',
+    'rgba(124,58,237,0.15)',
+    'rgba(124,58,237,0.25)',
+    'rgba(124,58,237,0.4)',
+    'rgba(167,139,250,0.6)',
+  ];
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => { if (entries[0].isIntersecting) { setIsVisible(true); observer.disconnect(); } },
+      { threshold: 0.3 }
+    );
+    if (containerRef.current) observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+
+    const CELL_SIZE = 13;
+    const GAP = 3;
+    const WEEKS = 52;
+    const DAYS = 7;
+    const PADDING_LEFT = 0;
+    const PADDING_TOP = 0;
+
+    const totalW = WEEKS * (CELL_SIZE + GAP) - GAP;
+    const totalH = DAYS * (CELL_SIZE + GAP) - GAP;
+
+    canvas.width = totalW * dpr;
+    canvas.height = totalH * dpr;
+    canvas.style.width = totalW + 'px';
+    canvas.style.height = totalH + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    startTimeRef.current = performance.now();
+    const ANIM_DURATION = 2500; // ms for full reveal
+    const WAVE_DELAY = 25;     // ms stagger per column
+
+    const draw = (timestamp) => {
+      const elapsed = timestamp - startTimeRef.current;
+      ctx.clearRect(0, 0, totalW, totalH);
+
+      const data = gridData.current;
+      const hovered = hoveredCell;
+
+      for (let w = 0; w < WEEKS; w++) {
+        for (let d = 0; d < DAYS; d++) {
+          const level = data[w][d];
+          const x = PADDING_LEFT + w * (CELL_SIZE + GAP);
+          const y = PADDING_TOP + d * (CELL_SIZE + GAP);
+
+          // Wave-based reveal: columns reveal left to right
+          const cellDelay = w * WAVE_DELAY;
+          const cellProgress = Math.min(1, Math.max(0, (elapsed - cellDelay) / 500));
+          const eased = 1 - Math.pow(1 - cellProgress, 3); // ease-out cubic
+
+          if (eased <= 0) continue;
+
+          // Scale animation
+          const scale = eased;
+          const cellAlpha = eased;
+
+          const cx = x + CELL_SIZE / 2;
+          const cy = y + CELL_SIZE / 2;
+          const r = 2.5; // border radius
+
+          ctx.save();
+          ctx.globalAlpha = cellAlpha;
+          ctx.translate(cx, cy);
+          ctx.scale(scale, scale);
+          ctx.translate(-cx, -cy);
+
+          // Glow for active cells
+          if (level > 0 && eased > 0.5) {
+            const glowSize = CELL_SIZE + 6;
+            const glowX = x - 3;
+            const glowY = y - 3;
+            ctx.shadowColor = LEVEL_GLOW[level];
+            ctx.shadowBlur = level * 4;
+          }
+
+          // Draw rounded rect
+          ctx.beginPath();
+          ctx.moveTo(x + r, y);
+          ctx.lineTo(x + CELL_SIZE - r, y);
+          ctx.quadraticCurveTo(x + CELL_SIZE, y, x + CELL_SIZE, y + r);
+          ctx.lineTo(x + CELL_SIZE, y + CELL_SIZE - r);
+          ctx.quadraticCurveTo(x + CELL_SIZE, y + CELL_SIZE, x + CELL_SIZE - r, y + CELL_SIZE);
+          ctx.lineTo(x + r, y + CELL_SIZE);
+          ctx.quadraticCurveTo(x, y + CELL_SIZE, x, y + CELL_SIZE - r);
+          ctx.lineTo(x, y + r);
+          ctx.quadraticCurveTo(x, y, x + r, y);
+          ctx.closePath();
+
+          // Color with animated brightness pulse for high-level cells
+          let color = LEVEL_COLORS[level];
+          if (level >= 3 && elapsed > cellDelay + 500) {
+            const pulse = Math.sin((elapsed - cellDelay) * 0.002) * 0.1;
+            const baseAlpha = level === 4 ? 0.95 : 0.75;
+            color = `rgba(167,139,250,${Math.min(1, baseAlpha + pulse)})`;
+          }
+          ctx.fillStyle = color;
+          ctx.fill();
+
+          // Subtle border
+          ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+
+          ctx.shadowColor = 'transparent';
+          ctx.shadowBlur = 0;
+          ctx.restore();
+        }
+      }
+
+      // Continue animation until fully revealed + a bit for pulses
+      if (elapsed < ANIM_DURATION + 3000) {
+        animRef.current = requestAnimationFrame(draw);
+      }
+    };
+
+    animRef.current = requestAnimationFrame(draw);
+    return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
+  }, [isVisible, hoveredCell]);
+
+  // Month labels
+  const months = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+  const CELL_SIZE = 13;
+  const GAP = 3;
+
+  return (
+    <div ref={containerRef} className="gh-contrib-grid-wrap">
+      <div className="gh-contrib-months">
+        {months.map((m, i) => (
+          <span key={m + i} className="gh-contrib-month" style={{
+            left: `${(i * (52 / 12)) * (CELL_SIZE + GAP)}px`,
+          }}>{m}</span>
+        ))}
+      </div>
+      <div className="gh-contrib-canvas-row">
+        <div className="gh-contrib-days">
+          <span>Mon</span>
+          <span>Wed</span>
+          <span>Fri</span>
+        </div>
+        <canvas
+          ref={canvasRef}
+          className="gh-contrib-canvas"
+        />
+      </div>
+      <div className="gh-contrib-legend">
+        <span className="gh-contrib-legend-label">Less</span>
+        {[0, 1, 2, 3, 4].map(level => (
+          <div key={level} className="gh-contrib-legend-cell" style={{
+            background: LEVEL_COLORS[level],
+            boxShadow: level > 0 ? `0 0 ${level * 3}px ${LEVEL_GLOW[level]}` : 'none',
+          }} />
+        ))}
+        <span className="gh-contrib-legend-label">More</span>
+      </div>
+    </div>
+  );
+};
+
+/* ── Animated Stat Value ── */
+const AnimatedStatValue = ({ value, isVisible }) => {
+  const [current, setCurrent] = useState(0);
+  const numVal = typeof value === 'number' ? value : parseInt(value, 10);
+
+  useEffect(() => {
+    if (!isVisible || isNaN(numVal)) return;
+    let start = 0;
+    const duration = 1200;
+    const startTime = performance.now();
+
+    const tick = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      setCurrent(Math.round(eased * numVal));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [isVisible, numVal]);
+
+  return <span>{current}</span>;
+};
+
 const GitHubStatsCard = () => {
   const [stats, setStats] = useState(null);
   const [langs, setLangs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [barsAnimated, setBarsAnimated] = useState(false);
+  const cardRef = useRef(null);
+
+  // Intersection observer for entrance
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting) {
+          setIsVisible(true);
+          setTimeout(() => setBarsAnimated(true), 600);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    if (cardRef.current) observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const username = 'ashishumrey009';
@@ -823,7 +1373,7 @@ const GitHubStatsCard = () => {
   }, []);
 
   return (
-    <div className="gh-card reveal">
+    <div ref={cardRef} className={`gh-card reveal${isVisible ? ' gh-card-animate' : ''}`}>
       {/* macOS-style topbar */}
       <div className="gh-topbar">
         <div className="gh-dot" style={{ background: '#FF5F57' }} />
@@ -850,29 +1400,42 @@ const GitHubStatsCard = () => {
           <>
             <div className="gh-stats-row">
               {[
-                { val: stats.repos, lbl: 'Public Repos' },
-                { val: stats.stars, lbl: 'Total Stars' },
-                { val: stats.followers, lbl: 'Followers' },
-                { val: stats.following, lbl: 'Following' },
-              ].map(s => (
-                <div key={s.lbl} className="gh-stat-chip">
-                  <div className="gh-stat-val">{s.val}</div>
+                { val: stats.repos, lbl: 'Public Repos', icon: '📦' },
+                { val: stats.stars, lbl: 'Total Stars', icon: '⭐' },
+                { val: stats.followers, lbl: 'Followers', icon: '👥' },
+                { val: stats.following, lbl: 'Following', icon: '🔗' },
+              ].map((s, i) => (
+                <div key={s.lbl} className={`gh-stat-chip gh-stat-stagger`} style={{
+                  animationDelay: isVisible ? `${i * 120}ms` : '0ms',
+                  opacity: isVisible ? undefined : 0,
+                }}>
+                  <div className="gh-stat-val">
+                    <AnimatedStatValue value={s.val} isVisible={isVisible} />
+                  </div>
                   <div className="gh-stat-lbl">{s.lbl}</div>
                 </div>
               ))}
             </div>
             {langs.length > 0 && (
               <>
-                <div className="gh-langs-title">Top Languages</div>
+                <div className={`gh-langs-title${isVisible ? ' gh-fade-in' : ''}`}>Top Languages</div>
                 <div className="gh-lang-bar-wrap">
-                  {langs.map(l => (
+                  {langs.map((l, i) => (
                     <div key={l.name} className="gh-lang-segment"
-                      style={{ flex: l.pct, background: l.color, opacity: 0.85 }} />
+                      style={{
+                        flex: barsAnimated ? l.pct : 0,
+                        background: l.color,
+                        opacity: barsAnimated ? 0.85 : 0,
+                        transitionDelay: `${i * 80}ms`,
+                      }} />
                   ))}
                 </div>
                 <div className="gh-lang-list">
-                  {langs.map(l => (
-                    <span key={l.name} className="gh-lang-pill">
+                  {langs.map((l, i) => (
+                    <span key={l.name} className={`gh-lang-pill gh-pill-stagger`} style={{
+                      animationDelay: isVisible ? `${800 + i * 100}ms` : '0ms',
+                      opacity: isVisible ? undefined : 0,
+                    }}>
                       <span className="gh-lang-dot" style={{ background: l.color }} />
                       {l.name} <span style={{ color: 'var(--faint)' }}>{l.pct}%</span>
                     </span>
@@ -884,14 +1447,9 @@ const GitHubStatsCard = () => {
         )}
       </div>
 
-      {/* Contribution graph */}
+      {/* Animated Contribution graph */}
       <div className="gh-contrib-wrap">
-        <img
-          src="https://ghchart.rshah.org/7C3AED/ashishumrey009"
-          alt="GitHub Contribution Graph"
-          loading="lazy"
-          style={{ filter: 'brightness(0.95) contrast(1.05)' }}
-        />
+        <ContributionGrid />
       </div>
 
       <div className="gh-footer">
@@ -1224,13 +1782,13 @@ const Portfolio = () => {
     {
       degree: 'Master of Technology — Software Engineering',
       institution: 'Motilal Nehru National Institute of Technology',
-      location: 'Allahabad, U.P.', grade: 'CPI: 8.2 / 10', icon: '🎓',
+      location: 'Allahabad, U.P.', grade: <><span style={{ color: 'var(--muted)' }}>CPI: </span><CountUp from={0} to={8.2} duration={2} decimals={1} suffix=" / 10" /></>, icon: '🎓',
       bg: 'linear-gradient(135deg,#7C3AED,#4F46E5)',
     },
     {
       degree: 'Bachelor of Technology — Computer Science & Engineering',
       institution: 'Bhilai Institute of Technology',
-      location: 'Durg, C.G.', grade: 'CGPA: 7.92 / 10', icon: '💻',
+      location: 'Durg, C.G.', grade: <><span style={{ color: 'var(--muted)' }}>CGPA: </span><CountUp from={0} to={7.92} duration={2} decimals={2} suffix=" / 10" /></>, icon: '💻',
       bg: 'linear-gradient(135deg,#10B981,#06B6D4)',
     },
   ];
@@ -1357,11 +1915,11 @@ const Portfolio = () => {
             </div>
           </div>
 
-          {/* Name */}
-          <h1 className="hero-name">
-            <BlurText text="Ashish" delay={100} stepDuration={0.45} animateBy="letters" direction="top" className="line-1" />
-            <BlurText text="Umrey" delay={100} stepDuration={0.45} animateBy="letters" direction="top" className="line-2" />
-          </h1>
+          {/* Name — rendered by particle canvas behind this content */}
+          <div style={{ height: 'clamp(140px, 20vw, 240px)', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Accessible hidden heading for SEO */}
+            <h1 className="sr-only">Ashish Umrey</h1>
+          </div>
 
           {/* Role typed */}
           <p className="hero-role">
@@ -1451,14 +2009,14 @@ const Portfolio = () => {
 
           <div className="bento-grid reveal">
             {bentoItems.map((item, i) => (
-              <div key={i} className={`bento-cell glass-card ${item.span}`}
-                style={{ transitionDelay: `${i * 60}ms` }}>
+              <TiltCard key={i} className={`bento-cell glass-card stagger-pop ${item.span}`}
+                style={{ animationDelay: `${i * 120}ms` }}>
                 <div className="bento-cell-icon" style={{ background: item.iconBg, color: item.iconColor }}>
                   {item.icon}
                 </div>
                 <div className="bento-cell-title">{item.title}</div>
                 <div className="bento-cell-desc">{item.desc}</div>
-              </div>
+              </TiltCard>
             ))}
           </div>
 
@@ -1470,7 +2028,7 @@ const Portfolio = () => {
             <div className="skills-cloud reveal">
               {skills.map((s, i) => (
                 <Magnet key={s.name} magnetStrength={0.25} padding={20}>
-                  <span className="skill-tag" style={{ transitionDelay: `${i * 40}ms` }}>
+                  <span className="skill-tag stagger-pop" style={{ animationDelay: `${i * 50}ms` }}>
                     <span className="emoji">{s.emoji}</span> {s.name}
                   </span>
                 </Magnet>
@@ -1504,7 +2062,7 @@ const Portfolio = () => {
                     <div className="timeline-loc"><MapPin size={11} />{exp.location}</div>
                     <ul className="timeline-bullets">
                       {exp.desc.map((d, i) => (
-                        <li key={i} className="timeline-bullet">{d}</li>
+                        <li key={i} className="timeline-bullet stagger-pop" style={{ animationDelay: `${i * 100}ms` }}>{d}</li>
                       ))}
                     </ul>
                   </div>
@@ -1526,13 +2084,13 @@ const Portfolio = () => {
 
           <div className="edu-grid">
             {education.map((edu, idx) => (
-              <GlassCard key={idx} className="edu-card" delay={idx * 100}>
+              <TiltCard key={idx} className="edu-card glass-card stagger-pop" style={{ animationDelay: `${idx * 150}ms` }}>
                 <div className="edu-icon" style={{ background: edu.bg }}>{edu.icon}</div>
                 <div className="edu-degree">{edu.degree}</div>
                 <div className="edu-institution">{edu.institution}</div>
                 <div className="edu-loc"><MapPin size={12} />{edu.location}</div>
                 <span className="edu-grade">{edu.grade}</span>
-              </GlassCard>
+              </TiltCard>
             ))}
           </div>
         </div>
@@ -1549,7 +2107,7 @@ const Portfolio = () => {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {projects.map((p, idx) => (
-              <GlassCard key={idx} className="project-card" delay={idx * 100}>
+              <TiltCard key={idx} className="project-card glass-card stagger-pop" style={{ animationDelay: `${idx * 150}ms` }}>
                 <div className="project-header">
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
                     <div className="project-icon-wrap" style={{ background: p.bg }}>{p.icon}</div>
@@ -1566,9 +2124,9 @@ const Portfolio = () => {
                 </div>
                 <p className="project-desc">{p.description}</p>
                 <div className="tech-tags">
-                  {p.tech.map(t => <span key={t} className="tech-tag">{t}</span>)}
+                  {p.tech.map(t => <span key={t} className="tech-tag stagger-pop" style={{ animationDelay: `${idx * 150 + 100}ms` }}>{t}</span>)}
                 </div>
-              </GlassCard>
+              </TiltCard>
             ))}
           </div>
         </div>
@@ -1592,7 +2150,7 @@ const Portfolio = () => {
 
           <div className="ach-grid">
             {achievements.map((a, idx) => (
-              <GlassCard key={idx} className="ach-card" delay={idx * 100}>
+              <TiltCard key={idx} className="ach-card glass-card stagger-pop" style={{ animationDelay: `${idx * 150}ms` }}>
                 <div className="ach-header">
                   <div className="ach-icon" style={{ background: a.iconBg, color: a.iconColor }}>
                     {a.icon}
@@ -1601,7 +2159,7 @@ const Portfolio = () => {
                 </div>
                 <ul className="ach-list">
                   {a.items.map((item, i) => (
-                    <li key={i} className="ach-item">
+                    <li key={i} className="ach-item stagger-pop" style={{ animationDelay: `${(idx * 150) + (i * 80) + 100}ms` }}>
                       <div className="ach-item-dot" style={{ background: a.dotColor }} />
                       <span>
                         {item.text}
@@ -1615,7 +2173,7 @@ const Portfolio = () => {
                     </li>
                   ))}
                 </ul>
-              </GlassCard>
+              </TiltCard>
             ))}
           </div>
         </div>
@@ -1645,27 +2203,27 @@ const Portfolio = () => {
               </div>
               <div className="terminal-body">
                 <div><span className="t-prompt">→</span> <span className="t-cmd">contact --info</span></div>
-                <div className="t-out">
+                <div className="t-out typewriter-line" style={{ animationDelay: '0.2s', width: '100%' }}>
                   &nbsp;&nbsp;<span className="t-key">email</span>
                   {'   '}<span className="t-val">ashishumrey009@gmail.com</span>
                 </div>
-                <div className="t-out">
+                <div className="t-out typewriter-line" style={{ animationDelay: '0.4s', width: '100%' }}>
                   &nbsp;&nbsp;<span className="t-key">phone</span>
                   {'   '}<span className="t-val">+91 8435389995</span>
                 </div>
-                <div className="t-out">
+                <div className="t-out typewriter-line" style={{ animationDelay: '0.6s', width: '100%' }}>
                   &nbsp;&nbsp;<span className="t-key">location</span>
                   {'  '}<span className="t-val">Chennai, Tamil Nadu, India</span>
                 </div>
-                <div className="t-out">
+                <div className="t-out typewriter-line" style={{ animationDelay: '0.8s', width: '100%' }}>
                   &nbsp;&nbsp;<span className="t-key">linkedin</span>
                   {'  '}<span className="t-val">linkedin.com/in/ashishumrey</span>
                 </div>
-                <div><span className="t-prompt">→</span> <span className="t-cmd">status</span></div>
-                <div className="t-out">
+                <div className="typewriter-line" style={{ animationDelay: '1.2s', width: '100%' }}><span className="t-prompt">→</span> <span className="t-cmd">status</span></div>
+                <div className="t-out typewriter-line" style={{ animationDelay: '1.4s', width: '100%' }}>
                   &nbsp;&nbsp;<span style={{ color: '#10B981' }}>✓</span> <span className="t-val">Open to full-time & remote opportunities</span>
                 </div>
-                <div><span className="t-prompt">→</span> <span className="t-cmd">reach_out</span><span className="t-cursor" /></div>
+                <div className="typewriter-line" style={{ animationDelay: '2.0s', width: '100%' }}><span className="t-prompt">→</span> <span className="t-cmd">reach_out</span><span className="t-cursor" /></div>
               </div>
             </div>
           </div>
