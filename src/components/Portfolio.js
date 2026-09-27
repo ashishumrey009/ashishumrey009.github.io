@@ -10,6 +10,15 @@ import BlurText from './BlurText';
 import CountUp from './CountUp';
 import Magnet from './Magnet';
 import TiltCard from './TiltCard';
+import MatrixCanvas from './MatrixCanvas';
+import ConstellationCanvas from './ConstellationCanvas';
+import StarfieldCanvas from './StarfieldCanvas';
+import WaveCanvas from './WaveCanvas';
+import HexagonCanvas from './HexagonCanvas';
+import RetroGridCanvas from './RetroGridCanvas';
+import PlasmaCanvas from './PlasmaCanvas';
+import SwarmCanvas from './SwarmCanvas';
+import FlowFieldCanvas from './FlowFieldCanvas';
 
 /* ─── CSS ────────────────────────────────────────────────────────────────── */
 const STYLES = `
@@ -1840,6 +1849,11 @@ const Portfolio = () => {
       {/* Custom Cursor */}
       <CustomCursor />
 
+      {/* Global subtle background animation */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, opacity: 0.15, pointerEvents: 'none' }}>
+        <ConstellationCanvas />
+      </div>
+
       {/* Mouse spotlight — full page */}
       <div ref={spotlightRef} style={{
         position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1,
@@ -1887,7 +1901,7 @@ const Portfolio = () => {
 
       {/* ══ HERO ══ */}
       <section id="about" className="hero-section">
-        {/* Particle canvas — interactive background */}
+        {/* Restored Particle Assembly for Hero */}
         <ParticleCanvas />
         {/* soft ambient glows behind particles */}
         <div className="glow-blob" style={{ width: 700, height: 700, background: 'radial-gradient(circle, rgba(124,58,237,0.13) 0%, transparent 65%)', top: -180, left: -180, zIndex: 0 }} />
