@@ -820,9 +820,10 @@ const STYLES = `
   /* ── Mobile (≤640px) ── */
   @media (max-width: 640px) {
     /* Hero */
-    .hero-section { padding: 80px 16px 60px; }
+    .hero-section { padding: 80px 16px 60px; min-height: auto; height: auto; }
     .hero-name { font-size: clamp(2.6rem, 12vw, 4.5rem); letter-spacing: -0.03em; }
-    .hero-role { font-size: 0.95rem; }
+    .hero-role { font-size: 0.95rem; margin-bottom: 20px; }
+    .hero-name-canvas-wrap { height: clamp(110px, 32vw, 170px); position: relative; display: flex; align-items: center; justify-content: center; width: 100%; margin-bottom: 4px; }
     .hero-cta-row { flex-direction: column; align-items: center; gap: 10px; }
     .hero-cta-row .btn-primary,
     .hero-cta-row .btn-ghost { width: 100%; max-width: 280px; justify-content: center; }
@@ -973,14 +974,17 @@ const ParticleCanvas = () => {
       offscreen.height = H;
 
       // Calculate responsive font size
-      const fontSize = Math.min(W / 8, H / 5, 110);
+      const isMobile = W < 640;
+      const fontSize = isMobile
+        ? Math.min(W / 5, 72)
+        : Math.min(W / 8, H / 5, 110);
       const lineGap = fontSize * 1.15;
       octx.fillStyle = '#fff';
       octx.textAlign = 'center';
       octx.textBaseline = 'middle';
       octx.font = `900 ${fontSize}px 'Outfit', 'Inter', Arial, sans-serif`;
 
-      const centerY = H * 0.49;
+      const centerY = isMobile ? H * 0.42 : H * 0.49;
       octx.fillText('ASHISH', W / 2, centerY - lineGap / 2);
       octx.fillText('UMREY', W / 2, centerY + lineGap / 2);
 
@@ -2127,7 +2131,7 @@ const Portfolio = () => {
           </div>
 
           {/* Name — rendered by particle canvas behind this content */}
-          <div style={{ height: 'clamp(140px, 20vw, 240px)', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="hero-name-canvas-wrap">
             {/* Accessible hidden heading for SEO */}
             <h1 className="sr-only">Ashish Umrey</h1>
           </div>
