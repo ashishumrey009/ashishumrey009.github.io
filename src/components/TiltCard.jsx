@@ -5,8 +5,8 @@ import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 
 const TiltCard = ({
   children,
-  tiltMaxAngle = 10,
-  scale = 1.02,
+  tiltMaxAngle = 5,
+  scale = 1.01,
   style = {},
   className = '',
 }) => {
@@ -16,10 +16,10 @@ const TiltCard = ({
   const mouseY = useMotionValue(0);
 
   const rotateX = useSpring(useTransform(mouseY, [-1, 1], [tiltMaxAngle, -tiltMaxAngle]), {
-    stiffness: 200, damping: 30,
+    stiffness: 120, damping: 25,
   });
   const rotateY = useSpring(useTransform(mouseX, [-1, 1], [-tiltMaxAngle, tiltMaxAngle]), {
-    stiffness: 200, damping: 30,
+    stiffness: 120, damping: 25,
   });
 
   const handleMouseMove = (e) => {

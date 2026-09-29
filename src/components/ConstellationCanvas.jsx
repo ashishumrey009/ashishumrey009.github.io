@@ -15,11 +15,11 @@ const ConstellationCanvas = () => {
     const particles = [];
     const properties = {
       bgColor: 'transparent',
-      particleColor: 'rgba(124, 58, 237, 0.5)', // Violet
-      particleRadius: 3,
-      particleCount: 80,
-      particleMaxVelocity: 0.8,
-      lineLength: 150,
+      particleColor: 'rgba(124, 58, 237, 0.35)',
+      particleRadius: 2,
+      particleCount: 35,
+      particleMaxVelocity: 0.3,
+      lineLength: 120,
       particleLife: 6,
     };
 

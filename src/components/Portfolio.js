@@ -4,7 +4,7 @@ import {
   Code, GraduationCap,
   ExternalLink, Target, Phone, Menu, X,
   ShieldCheck, Workflow, Gauge, ArrowUpRight, Terminal,
-  Layers
+  Layers, Award, BookOpen, Trophy, Sparkles, CheckCircle
 } from 'lucide-react';
 import BlurText from './BlurText';
 import CountUp from './CountUp';
@@ -19,6 +19,7 @@ import RetroGridCanvas from './RetroGridCanvas';
 import PlasmaCanvas from './PlasmaCanvas';
 import SwarmCanvas from './SwarmCanvas';
 import FlowFieldCanvas from './FlowFieldCanvas';
+import QuestRoadmap from './QuestRoadmap';
 
 /* ─── CSS ────────────────────────────────────────────────────────────────── */
 const STYLES = `
@@ -91,20 +92,20 @@ const STYLES = `
   }
 
   /* ── Reveal animations ── */
-  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1); will-change: opacity, transform; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
-  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1); will-change: opacity, transform; }
   .reveal-left.visible { opacity: 1; transform: translateX(0); }
-  .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1); will-change: opacity, transform; }
   .reveal-right.visible { opacity: 1; transform: translateX(0); }
 
   /* Generic stagger pop animation */
   .stagger-pop {
-    animation: stagger-pop-anim 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
+    animation: stagger-pop-anim 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0; will-change: opacity, transform;
   }
   @keyframes stagger-pop-anim {
-    from { opacity: 0; transform: scale(0.9) translateY(12px); }
+    from { opacity: 0; transform: scale(0.95) translateY(8px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
   }
 
@@ -262,9 +263,10 @@ const STYLES = `
       var(--violet) 300deg,
       transparent 360deg
     );
-    animation: conic-spin 4s linear infinite;
+    animation: conic-spin 20s linear infinite;
     filter: blur(1px);
-    opacity: 0.85;
+    opacity: 0.7;
+    will-change: transform;
   }
   @keyframes conic-spin {
     from { transform: rotate(0deg); }
@@ -279,11 +281,11 @@ const STYLES = `
     );
     padding: 3px;
     display: flex; align-items: center; justify-content: center;
-    animation: conic-spin 6s linear infinite reverse;
+    animation: conic-spin 12s linear infinite reverse;
     box-shadow:
-      0 0 24px rgba(124,58,237,0.5),
-      0 0 48px rgba(6,182,212,0.2),
-      inset 0 0 16px rgba(124,58,237,0.15);
+      0 0 20px rgba(124,58,237,0.35),
+      0 0 40px rgba(6,182,212,0.12);
+    will-change: transform;
   }
   .hero-photo-inner {
     width: 100%; height: 100%; border-radius: 50%;
@@ -291,7 +293,8 @@ const STYLES = `
     display: flex; align-items: center; justify-content: center;
     overflow: hidden;
     /* counter-rotate to keep photo upright */
-    animation: conic-spin 6s linear infinite;
+    animation: conic-spin 12s linear infinite;
+    will-change: transform;
   }
   .hero-photo-inner img {
     width: 148px; height: 148px; border-radius: 50%;
@@ -409,18 +412,19 @@ const STYLES = `
     border: 1px solid var(--border);
     border-radius: 20px;
     position: relative; overflow: hidden;
-    transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+    transition: border-color 0.5s ease, box-shadow 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
   }
   .glass-card::before {
     content: ''; position: absolute; inset: 0;
-    background: radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(124,58,237,0.08), transparent 60%);
-    opacity: 0; transition: opacity 0.4s; pointer-events: none;
+    background: radial-gradient(600px circle at var(--mx,50%) var(--my,50%), rgba(124,58,237,0.06), transparent 60%);
+    opacity: 0; transition: opacity 0.6s ease; pointer-events: none;
   }
   .glass-card:hover::before { opacity: 1; }
   .glass-card:hover {
-    border-color: rgba(124,58,237,0.25);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,58,237,0.1);
+    border-color: rgba(124,58,237,0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3), 0 0 0 1px rgba(124,58,237,0.08);
   }
 
   /* ── Bento Grid ── */
@@ -496,6 +500,61 @@ const STYLES = `
   .timeline-bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .timeline-bullet { display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
   .timeline-bullet::before { content: '→'; color: var(--cyan); flex-shrink: 0; margin-top: 1px; font-size: 0.8rem; font-family: var(--mono-font); }
+
+  /* ── Milestone Timeline Card ── */
+  .milestone-card {
+    position: relative;
+    border: 1px solid rgba(245,158,11,0.2) !important;
+    background: rgba(10, 10, 18, 0.5) !important;
+  }
+
+  .milestone-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: rgba(245,158,11,0.12); color: #FCD34D;
+    border: 1px solid rgba(245,158,11,0.25);
+    margin-bottom: 14px; animation: pulse-glow 3s ease-in-out infinite;
+  }
+  @keyframes pulse-glow {
+    0%,100% { box-shadow: 0 0 8px rgba(245,158,11,0.15); }
+    50%     { box-shadow: 0 0 20px rgba(245,158,11,0.35); }
+  }
+  .milestone-achievements {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-top: 8px;
+  }
+  @media (max-width: 480px) { .milestone-achievements { grid-template-columns: 1fr; } }
+  .milestone-badge {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; border-radius: 12px;
+    border: 1px solid var(--border-2); background: var(--surface-1);
+    transition: all 0.3s ease;
+  }
+  .milestone-badge:hover {
+    border-color: rgba(245,158,11,0.4);
+    background: rgba(245,158,11,0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(245,158,11,0.12);
+  }
+  .milestone-badge-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .milestone-badge-title {
+    font-family: var(--heading-font); font-size: 0.82rem;
+    font-weight: 700; color: var(--pearl); line-height: 1.3;
+  }
+  .milestone-badge-sub {
+    font-size: 0.72rem; color: var(--muted); margin-top: 2px;
+  }
+  .milestone-narrative {
+    font-size: 0.85rem; color: var(--muted); line-height: 1.7;
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid var(--border); font-style: italic;
+  }
 
   /* ── Education Cards ── */
   .edu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
@@ -927,23 +986,17 @@ const ParticleCanvas = () => {
           return;
         }
 
-        // Glow
-        const glowR = this.r * 3.5;
-        const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, glowR);
         const hue = this.hue;
-        grad.addColorStop(0, `hsla(${hue}, 80%, 75%, ${this.alpha * 0.6})`);
-        grad.addColorStop(0.4, `hsla(${hue}, 70%, 60%, ${this.alpha * 0.15})`);
-        grad.addColorStop(1, `hsla(${hue}, 60%, 50%, 0)`);
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, glowR, 0, Math.PI * 2);
-        ctx.fillStyle = grad;
-        ctx.fill();
 
-        // Core
+        // Soft glow via shadowBlur (GPU-composited, much cheaper than radialGradient)
+        ctx.save();
+        ctx.shadowColor = `hsla(${hue}, 80%, 70%, ${this.alpha * 0.4})`;
+        ctx.shadowBlur = this.r * 4;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
         ctx.fillStyle = `hsla(${hue}, 85%, 80%, ${this.alpha})`;
         ctx.fill();
+        ctx.restore();
       }
     }
 
@@ -951,7 +1004,7 @@ const ParticleCanvas = () => {
     let textParticles = textTargets.map(t => new Particle(t.x, t.y, false));
 
     // Ambient background particles
-    const AMBIENT_COUNT = Math.min(80, Math.floor((W * H) / 18000));
+    const AMBIENT_COUNT = Math.min(30, Math.floor((W * H) / 28000));
     const ambientParticles = Array.from({ length: AMBIENT_COUNT }, () =>
       new Particle(0, 0, true)
     );
@@ -1754,9 +1807,11 @@ const Portfolio = () => {
       period: 'Apr 2025 – Present', location: 'Chennai, India', logo: '🏥',
       bg: 'linear-gradient(135deg,#7C3AED,#5B21B6)',
       desc: [
-        'Transitioned to backend development, building scalable microservices using Java Spring Boot',
-        'Designed and implemented RESTful APIs for critical healthcare workflows',
-        'Collaborated cross-functionally to integrate backend services with React-based frontends',
+        'Owned and designed critical UI services supporting prior-authorization workflows used by 2–3K daily users handling ~50K tasks per day.',
+        'Designed scalable REST API error-handling contracts enabling backend-driven custom error codes and dynamic UI error rendering.',
+        'Implemented monitoring and safety nets that reduced production issues by ~30%.',
+        'Acted as subject-matter expert across frontend and backend services, mentoring engineers and reviewing designs and pull requests.',
+        'Scrum Master (Nov 2024 – Present) — Led sprint planning, reviews, retrospectives, sprint demos, and facilitated cross-team collaboration and delivery.'
       ],
     },
     {
@@ -1764,27 +1819,57 @@ const Portfolio = () => {
       period: 'Mar 2021 – Mar 2025', location: 'Chennai, India', logo: '🏥',
       bg: 'linear-gradient(135deg,#6366F1,#4F46E5)',
       desc: [
-        'Developed Product Authops — an authorization system for medical claims',
-        'Revolutionized UI with Z-pattern framework, boosting BPO agent efficiency by 20% & reducing task time by 25%',
-        'Implemented React + Forge components for agents to process medical claims',
-        'Integrated APIs to retrieve data and populate interface screens',
+        'Owned and revamped AuthOps UI end-to-end, introducing Z-pattern UI design and improving productivity by ~27%.',
+        'Removed backend-for-frontend dependency by enabling direct browser-based API calls.',
+        'Reduced AWS EC2 infrastructure cost by ~20% via migration to lightweight micro-frontend architecture.',
+        'Designed a configuration-driven data-enrichment UI framework enabling payer-specific workflows without code duplication, increasing automation by 34% and significantly reducing manual initiation, agent follow-ups, and prior authorization effort.',
+        'Designed automation test scenarios reducing manual regression testing effort by ~90%.'
       ],
     },
     {
       title: 'Software Engineer', company: 'Oracle Cerner',
       period: 'Nov 2020 – Mar 2021', location: 'Bangalore, India', logo: '🔮',
       bg: 'linear-gradient(135deg,#EC4899,#DB2777)',
-      desc: ['Contributed as a software engineer on the Partogram Project built with React'],
+      desc: ['Developed reusable React components for healthcare applications in collaboration with product and design teams.'],
     },
     {
-      title: 'Intern', company: 'SAP Labs',
-      period: '2018 – 2019', location: 'Bangalore, India', logo: '💼',
+      title: 'Software Engineer', company: 'K12 Techno Solutions',
+      period: 'Apr 2020 – Aug 2020', location: 'Bangalore, India', logo: '🎓',
+      bg: 'linear-gradient(135deg,#F59E0B,#D97706)',
+      desc: ['Built frontend pages in React, Material UI, HTML and CSS for letsEduvate, a school ERP and learning platform.'],
+    },
+    {
+      title: 'IXP Intern', company: 'SAP Labs',
+      period: 'Aug 2018 – Jul 2019', location: 'Bangalore, India', logo: '💼',
       bg: 'linear-gradient(135deg,#10B981,#059669)',
       desc: [
-        'Built enterprise-ready web applications using SAP UI5',
-        'Gained hands-on experience with SAP technologies and agile development practices',
+        'Built enterprise-grade applications using SAP UI5 as part of a custom development team.'
       ],
     },
+    {
+      title: 'Competitive Exam Preparation', company: 'Career Growth Phase',
+      period: 'Jun 2014 – Jul 2017', location: 'India', logo: '🏆',
+      bg: 'linear-gradient(135deg,#F59E0B,#D97706)',
+      milestone: true,
+      milestoneAchievements: [
+        { icon: <Award size={16} />, iconBg: 'rgba(124,58,237,0.15)', iconColor: '#A78BFA', title: 'GATE Qualified × 3', sub: '2015, 2016, 2017' },
+        { icon: <CheckCircle size={16} />, iconBg: 'rgba(16,185,129,0.15)', iconColor: '#34d399', title: 'CGPSC Exam Cleared', sub: 'Lecturer post — reached final interview' },
+        { icon: <GraduationCap size={16} />, iconBg: 'rgba(6,182,212,0.15)', iconColor: '#67E8F9', title: 'M.Tech Admission', sub: 'Secured seat at MNNIT Allahabad (NIT) via GATE' },
+      ],
+      desc: [
+        'Dedicated this period to competitive exam preparation — cleared GATE three consecutive years and passed the CGPSC State Lecturer exam, reaching the final interview round.',
+        'Secured admission to M.Tech (Software Engineering) at MNNIT Allahabad, one of India\'s premier NITs.',
+      ],
+    },
+    {
+      title: 'Systems Engineer', company: 'Tata Consultancy Services',
+      period: 'Oct 2011 – Jun 2014', location: 'Bangalore, India', logo: '🏢',
+      bg: 'linear-gradient(135deg,#06B6D4,#0284C7)',
+      desc: [
+        'Fixed defects and participated in code reviews on client projects.',
+        'Refactored existing codebase to support reuse across ongoing projects.'
+      ],
+    }
   ];
 
   const education = [
@@ -2068,17 +2153,23 @@ const Portfolio = () => {
                 <div className="timeline-dot" style={{ background: exp.bg }}>
                   {exp.logo}
                 </div>
-                <GlassCard className="timeline-card" style={{ flex: 1, padding: 0 }}>
-                  <div className="timeline-card">
-                    <span className="timeline-period">{exp.period}</span>
-                    <div className="timeline-title">{exp.title}</div>
-                    <div className="timeline-company">{exp.company}</div>
-                    <div className="timeline-loc"><MapPin size={11} />{exp.location}</div>
-                    <ul className="timeline-bullets">
-                      {exp.desc.map((d, i) => (
-                        <li key={i} className="timeline-bullet stagger-pop" style={{ animationDelay: `${i * 100}ms` }}>{d}</li>
-                      ))}
-                    </ul>
+                <GlassCard className={`timeline-card${exp.milestone ? ' milestone-card' : ''}`} style={{ flex: 1, padding: 0 }}>
+                  <div className={exp.milestone ? '' : 'timeline-card'}>
+                    {exp.milestone ? (
+                      <QuestRoadmap />
+                    ) : (
+                      <>
+                        <span className="timeline-period">{exp.period}</span>
+                        <div className="timeline-title">{exp.title}</div>
+                        <div className="timeline-company">{exp.company}</div>
+                        <div className="timeline-loc"><MapPin size={11} />{exp.location}</div>
+                        <ul className="timeline-bullets">
+                          {exp.desc.map((d, i) => (
+                            <li key={i} className="timeline-bullet stagger-pop" style={{ animationDelay: `${i * 100}ms` }}>{d}</li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
                   </div>
                 </GlassCard>
               </div>
@@ -2205,7 +2296,7 @@ const Portfolio = () => {
           </p>
 
           {/* Terminal card */}
-          <div className="reveal" style={{ marginBottom: 32 }}>
+          <div className="reveal-left" style={{ marginBottom: 32 }}>
             <div className="terminal-card">
               <div className="terminal-bar">
                 <div className="topbar-dot" style={{ background: '#FF5F57' }} />
