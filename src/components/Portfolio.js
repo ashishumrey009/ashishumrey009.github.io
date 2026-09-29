@@ -787,12 +787,124 @@ const STYLES = `
     filter: blur(100px);
   }
 
+  /* ════════════════════════════════════════════════════
+     RESPONSIVE — Mobile First
+     ════════════════════════════════════════════════════ */
+
+  /* ── Tablet (≤768px) ── */
+  @media (max-width: 768px) {
+    /* Section padding */
+    .section-root { padding: 70px 16px; }
+    .section-title { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+    .section-subtitle { font-size: 0.9rem; }
+
+    /* Bento */
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-cell.span-2, .bento-cell.span-full { grid-column: span 1; }
+
+    /* Education / Achievements */
+    .edu-grid, .ach-grid { grid-template-columns: 1fr; }
+
+    /* GitHub stats */
+    .gh-stats-row { grid-template-columns: repeat(2, 1fr); }
+    .gh-body { padding: 16px; }
+
+    /* Terminal */
+    .terminal-body { padding: 14px; font-size: 0.78rem; line-height: 1.7; }
+
+    /* Contact chips */
+    .contact-links-row { gap: 8px; }
+    .contact-chip { font-size: 0.78rem; padding: 8px 14px; }
+  }
+
+  /* ── Mobile (≤640px) ── */
   @media (max-width: 640px) {
-    .hero-name { font-size: clamp(2.8rem, 13vw, 5rem); }
+    /* Hero */
+    .hero-section { padding: 80px 16px 60px; }
+    .hero-name { font-size: clamp(2.6rem, 12vw, 4.5rem); letter-spacing: -0.03em; }
+    .hero-role { font-size: 0.95rem; }
+    .hero-cta-row { flex-direction: column; align-items: center; gap: 10px; }
+    .hero-cta-row .btn-primary,
+    .hero-cta-row .btn-ghost { width: 100%; max-width: 280px; justify-content: center; }
+    .hero-stats { gap: 6px; }
+    .stat-chip { padding: 8px 14px; }
+    .stat-chip-val { font-size: 1rem; }
+
+    /* Timeline */
     .timeline::before { display: none; }
     .timeline-item { flex-direction: column; gap: 10px; }
     .timeline-dot { width: 44px; height: 44px; font-size: 1.1rem; }
-    .edu-grid, .ach-grid { grid-template-columns: 1fr; }
+    .timeline-card { padding: 16px; }
+    .timeline-title { font-size: 0.95rem; }
+
+    /* Sections */
+    .section-root { padding: 56px 14px; }
+    .section-inner { max-width: 100%; }
+
+    /* Bento cells */
+    .bento-cell { padding: 18px; }
+    .bento-cell-title { font-size: 0.95rem; }
+    .bento-cell-desc { font-size: 0.8rem; }
+
+    /* Skills */
+    .skill-tag { padding: 8px 14px; font-size: 0.8rem; }
+
+    /* Project cards */
+    .project-card { padding: 18px; }
+    .project-title { font-size: 0.95rem; }
+    .project-header { flex-direction: column; gap: 10px; }
+    .project-view-btn { align-self: flex-start; }
+
+    /* Education */
+    .edu-card { padding: 18px; }
+    .edu-degree { font-size: 0.88rem; }
+
+    /* GitHub */
+    .gh-stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .gh-stat-val { font-size: 1.2rem; }
+    .gh-stat-lbl { font-size: 0.65rem; }
+    .gh-contrib-wrap { padding: 14px 10px; overflow-x: auto; }
+    .gh-body { padding: 14px; }
+
+    /* Achievements */
+    .ach-card { padding: 18px; }
+    .milestone-achievements { grid-template-columns: 1fr; }
+
+    /* Terminal contact */
+    .terminal-body { padding: 12px 10px; font-size: 0.73rem; word-break: break-all; }
+    .terminal-bar { padding: 10px 12px; }
+
+    /* Nav */
+    .nav-root { padding: 12px 16px; }
+    .nav-root.scrolled { padding: 10px 16px; }
+    .nav-logo { font-size: 1.1rem; }
+
+    /* Float CTA */
+    .float-cta { bottom: 16px; right: 16px; padding: 10px 16px; font-size: 0.78rem; }
+
+    /* Glass card hover effects off on mobile (performance) */
+    .glass-card:hover { transform: none; }
+  }
+
+  /* ── Small mobile (≤400px) ── */
+  @media (max-width: 400px) {
+    .hero-name { font-size: clamp(2.2rem, 11vw, 3.5rem); }
+    .hero-stats { flex-direction: column; align-items: center; }
+    .gh-stats-row { grid-template-columns: 1fr 1fr; }
+    .stat-chip { padding: 6px 10px; }
+    .section-root { padding: 48px 12px; }
+    .timeline-card { padding: 12px; }
+    .terminal-body { font-size: 0.68rem; }
+    .mobile-nav-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── Hover: none (touch devices) ── */
+  @media (hover: none) {
+    .c-dot, .c-ring { display: none; }
+    .glass-card:hover { transform: none; box-shadow: none; }
+    .skill-tag:hover { transform: none; }
+    .social-icon:hover { transform: none; }
+    .timeline-item { animation: none; }
   }
 `;
 

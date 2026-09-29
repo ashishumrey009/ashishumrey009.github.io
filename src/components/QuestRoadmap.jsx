@@ -49,6 +49,36 @@ const STYLES = `
     letter-spacing: 0.04em;
   }
 
+  /* ── Mobile responsive ── */
+  @media (max-width: 640px) {
+    .qr-header { padding: 16px 16px 14px; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .qr-character { margin: 12px 16px 18px; flex-wrap: wrap; gap: 12px; }
+    .qr-xp-bar-wrap { min-width: 100%; }
+    .qr-tree { padding: 0 16px; }
+    .qr-node-row.dual { flex-direction: column; gap: 10px; }
+    .qr-node { flex: none; width: 100%; }
+    .qr-node-name { font-size: 0.85rem; }
+    .qr-node-desc { font-size: 0.7rem; }
+    .qr-skill { font-size: 0.6rem; padding: 4px 8px; }
+    .qr-quote { margin: 14px 16px 0; }
+    .qr-fork-line-h { left: 25%; right: 25%; }
+    .qr-fork-line-down-left { left: 25%; }
+    .qr-fork-line-down-right { right: 25%; }
+    .qr-rejoin-line-h { left: 25%; right: 25%; }
+    .qr-rejoin-line-up-left { left: 25%; }
+    .qr-rejoin-line-up-right { right: 25%; }
+  }
+
+  @media (max-width: 400px) {
+    .qr-header { padding: 14px 12px 12px; }
+    .qr-character { margin: 10px 12px 16px; padding: 12px 14px; }
+    .qr-tree { padding: 0 12px; }
+    .qr-quote { margin: 12px 12px 0; }
+    .qr-char-name { font-size: 0.85rem; }
+    .qr-avatar { width: 42px; height: 42px; font-size: 1.5rem; }
+  }
+
+
   /* ── Character banner ── */
   .qr-character {
     display: flex; align-items: center; gap: 16px;
