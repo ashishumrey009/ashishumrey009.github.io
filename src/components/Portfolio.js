@@ -240,6 +240,14 @@ const STYLES = `
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  .hero-name-canvas-wrap {
+    height: clamp(140px, 20vw, 240px);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
   .hero-role {
     font-size: 1.1rem; font-weight: 400; color: var(--muted);
     margin-bottom: 40px; letter-spacing: 0.02em;
